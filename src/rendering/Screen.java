@@ -7,7 +7,6 @@ import java.awt.*;
 
 public class Screen extends JFrame implements Runnable {
     private final static int FPS = 60;
-    private final static int WIDTH = 400;
 
     private final Toolkit toolkit = Toolkit.getDefaultToolkit();
     private final Dimension screenSize = toolkit.getScreenSize();
@@ -36,7 +35,6 @@ public class Screen extends JFrame implements Runnable {
             if (System.nanoTime() - currentTime < FPS ) {
                 tick();
                 repaint();
-
 
                 try {
                     long remaningTime = nextDrawTime - System.nanoTime();
