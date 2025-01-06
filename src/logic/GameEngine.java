@@ -29,4 +29,12 @@ public class GameEngine {
     }
 
     //Need a function to move player
+    public void movePlayer(){
+        moving(diceRoll());
+    }
+
+    public void moving(int roll){
+
+    }
+
 }
