@@ -1,6 +1,8 @@
 package src.rendering;
 
 import src.logic.GameEngine;
+import src.rendering.menu.AbstractMenu;
+import src.rendering.menu.StartingMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +16,11 @@ public class Screen extends JFrame implements Runnable {
     public int screenHeight = screenSize.height;
 
     private final GameEngine gameEngine;
+    private final RenderEngine renderEngine;
+
+    private AbstractMenu currentMenu;
+    private final AbstractMenu startingMenu;
+
 
     public Screen() {
         setTitle("Chutes and Ladders");
@@ -23,6 +30,19 @@ public class Screen extends JFrame implements Runnable {
         setLayout(null);
 
         gameEngine = new GameEngine();
+        renderEngine = new RenderEngine(this);
+
+        startingMenu = new StartingMenu(renderEngine);
+        setMenu(startingMenu);
+    }
+
+    public void setMenu(AbstractMenu menu) {
+        if(currentMenu != null) {
+            currentMenu.onRemove();
+        }
+        menu.onSetActive();
+        currentMenu = menu;
+        setContentPane(menu.getPane());
     }
 
     @Override
@@ -56,5 +76,15 @@ public class Screen extends JFrame implements Runnable {
 
     private void tick() {
         gameEngine.tick();
+    }
+
+    public void paint(Graphics g) {
+        super.paint(g);
+
+        Graphics2D g2 = (Graphics2D) g;
+
+        renderEngine.draw(g2);
+
+        g2.dispose();
     }
 }
