@@ -4,6 +4,7 @@ import src.rendering.RenderEngine;
 import src.util.JBackgroundPanel;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class StartingMenu extends AbstractMenu {
 
@@ -21,6 +22,9 @@ public class StartingMenu extends AbstractMenu {
         JPanel startPanel = new JPanel();
 
         JLabel start = new JLabel("Hello World");
+
+        start.setForeground(new Color(150, 150, 0));
+        start.setFont(new Font("Dialog", Font.PLAIN, 25));
 
         startPanel.add(start);
 
