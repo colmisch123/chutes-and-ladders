@@ -23,4 +23,10 @@ public class GameEngine {
     public Board getBoard() {
         return this.board;
     }
+
+    public int diceRoll(){
+        return (int)(Math.random() * 6) + 1;
+    }
+
+    //Need a function to move player
 }
