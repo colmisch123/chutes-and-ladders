@@ -26,8 +26,8 @@ public class Board {
         if(tile == null) {
             return;
         }
-
         action.accept(tile);
         forEachHelper(action, tile.getNextTile());
     }
+
 }
