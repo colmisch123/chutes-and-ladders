@@ -40,6 +40,7 @@ public abstract class AbstractMenu implements Drawable {
         this.pane.add(background, JLayeredPane.DEFAULT_LAYER);
         this.pane.add(foreground, JLayeredPane.PALETTE_LAYER);
 
+        screen.addResizeEvent(this::resize);
         engine.addDrawable(this);
     }
 
@@ -47,10 +48,9 @@ public abstract class AbstractMenu implements Drawable {
         return this.pane;
     }
 
+    //Remove this implementation
     public void draw(Graphics2D g2) {
-        if(engine.getScreen().hasScreenBeenResized()) {
-            resize();
-        }
+
     }
 
     private void resize() {

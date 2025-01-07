@@ -7,6 +7,7 @@ import src.rendering.menu.StartingMenu;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.LinkedList;
 
 public class Screen extends JFrame implements Runnable {
     private final static int FPS = 60;
@@ -18,6 +19,8 @@ public class Screen extends JFrame implements Runnable {
 
     private final GameEngine gameEngine;
     private final RenderEngine renderEngine;
+
+    private final LinkedList<Runnable> onResizeEvent = new LinkedList<>();
 
     private AbstractMenu currentMenu;
     private final AbstractMenu startingMenu;
@@ -54,7 +57,7 @@ public class Screen extends JFrame implements Runnable {
         setContentPane(menu.getPane());
     }
 
-    public boolean hasScreenBeenResized() {
+    private boolean hasScreenBeenResized() {
         Dimension currentSize = getSize();
 
         if(sizeCache.equals(currentSize)) {
@@ -63,6 +66,10 @@ public class Screen extends JFrame implements Runnable {
 
         this.sizeCache = currentSize;
         return true;
+    }
+
+    public void addResizeEvent(Runnable event) {
+        onResizeEvent.add(event);
     }
 
     public GridBagLayout getLayout() {
@@ -107,6 +114,10 @@ public class Screen extends JFrame implements Runnable {
     }
 
     private void tick() {
+        if(hasScreenBeenResized()) {
+            onResizeEvent.forEach(Runnable::run);
+        }
+
         gameEngine.tick();
     }
 

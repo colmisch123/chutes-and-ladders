@@ -34,8 +34,6 @@ public class GameBoardMenu extends AbstractMenu {
     public void draw(Graphics2D g2) {
         super.draw(g2);
 
-        background.setBackground(Color.WHITE);
-
         if(screen.getCurrentMenu() == this) {
             g2.setColor(new Color(255, 0, 0));
             g2.fillRect(x, 100, 100, 100);
