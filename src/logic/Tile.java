@@ -11,8 +11,8 @@ public class Tile {
     int length = 100;
     int height = 100;
 
-    Tile ladder;
-    Tile chute;
+    private Tile ladder;
+    private Tile chute;
 
     //A linked list is used to keep track of players on each tile
     LinkedList<Player> players = new LinkedList<>();
@@ -20,6 +20,14 @@ public class Tile {
 
     public boolean hasChuteOrLadder(){
         return !(ladder == null && chute == null);
+    }
+
+    public void setChute(Tile newChute){
+        this.chute = newChute;
+    }
+
+    public void setLadder(Tile newLadder){
+        this.ladder = newLadder;
     }
 
     public Tile getNextTile() {
