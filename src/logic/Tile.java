@@ -11,5 +11,15 @@ public class Tile {
         return next;
     }
 
+    public void removePlayerFromTile(Player player){
+        players.remove(player);
+    }
+
+    public void addPlayerToTile(Player player){
+        players.add(player);
+    }
+
     LinkedList<Player> players = new LinkedList<>();
+
+
 }
