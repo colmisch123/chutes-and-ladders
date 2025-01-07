@@ -11,6 +11,7 @@ public class Board {
     public Board(GameEngine engine) {
         this.engine = engine;
         this.root = new Tile();
+        root.setPrevious(null);
     }
 
     public Tile getRoot() {
