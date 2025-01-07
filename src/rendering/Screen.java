@@ -2,6 +2,7 @@ package src.rendering;
 
 import src.logic.GameEngine;
 import src.rendering.menu.AbstractMenu;
+import src.rendering.menu.GameBoardMenu;
 import src.rendering.menu.StartingMenu;
 
 import javax.swing.*;
@@ -20,6 +21,7 @@ public class Screen extends JFrame implements Runnable {
 
     private AbstractMenu currentMenu;
     private final AbstractMenu startingMenu;
+    private final GameBoardMenu gameBoardMenu;
 
     private Dimension sizeCache;
 
@@ -38,6 +40,8 @@ public class Screen extends JFrame implements Runnable {
         renderEngine = new RenderEngine(this);
 
         startingMenu = new StartingMenu(renderEngine);
+        gameBoardMenu = new GameBoardMenu(renderEngine);
+
         setMenu(startingMenu);
     }
 
@@ -63,6 +67,14 @@ public class Screen extends JFrame implements Runnable {
 
     public GridBagLayout getLayout() {
         return layout;
+    }
+
+    public AbstractMenu getCurrentMenu() {
+        return currentMenu;
+    }
+
+    public AbstractMenu getGameBoardMenu() {
+        return gameBoardMenu;
     }
 
     @Override

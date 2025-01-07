@@ -59,6 +59,10 @@ public class StartingMenu extends AbstractMenu {
                 .setNorth(100)
                 .confirm(startButton, startPanel, screen);
 
+        startButton.addActionListener((e -> {
+            screen.setMenu(screen.getGameBoardMenu());
+        }));
+
         return startPanel;
     }
 
