@@ -21,6 +21,9 @@ public class Screen extends JFrame implements Runnable {
     private AbstractMenu currentMenu;
     private final AbstractMenu startingMenu;
 
+    private Dimension sizeCache;
+
+    private final GridBagLayout layout = new GridBagLayout();
 
     public Screen() {
         setTitle("Chutes and Ladders");
@@ -28,6 +31,8 @@ public class Screen extends JFrame implements Runnable {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds((int) screenWidth / 4, (int) screenHeight / 10, 960, 720);
         setLayout(null);
+
+        sizeCache = getSize();
 
         gameEngine = new GameEngine();
         renderEngine = new RenderEngine(this);
@@ -43,6 +48,21 @@ public class Screen extends JFrame implements Runnable {
         menu.onSetActive();
         currentMenu = menu;
         setContentPane(menu.getPane());
+    }
+
+    public boolean hasScreenBeenResized() {
+        Dimension currentSize = getSize();
+
+        if(sizeCache.equals(currentSize)) {
+            return false;
+        }
+
+        this.sizeCache = currentSize;
+        return true;
+    }
+
+    public GridBagLayout getLayout() {
+        return layout;
     }
 
     @Override

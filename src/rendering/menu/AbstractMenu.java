@@ -1,7 +1,6 @@
 package src.rendering.menu;
 
 import src.imp.Drawable;
-import src.imp.Tickable;
 import src.rendering.RenderEngine;
 import src.rendering.Screen;
 
@@ -10,6 +9,7 @@ import java.awt.*;
 
 public abstract class AbstractMenu implements Drawable {
     protected final RenderEngine engine;
+    protected final Screen screen;
     protected JLayeredPane pane;
     protected JPanel background;
     protected JPanel foreground;
@@ -19,12 +19,17 @@ public abstract class AbstractMenu implements Drawable {
 
     public AbstractMenu(RenderEngine engine) {
         this.engine = engine;
+        this.screen = engine.getScreen();
+
+        priorityInit();
 
         this.pane = new JLayeredPane();
         this.width = engine.getScreen().getWidth();
         this.height = engine.getScreen().getHeight();
         this.background = getBackground();
         this.foreground = getForeground();
+
+        foreground.setLayout(engine.getScreen().getLayout());
 
         pane.setBounds(0, 0, width, height);
         background.setBounds(0, 0, width, height);
@@ -43,12 +48,20 @@ public abstract class AbstractMenu implements Drawable {
     }
 
     public void draw(Graphics2D g2) {
+        if(engine.getScreen().hasScreenBeenResized()) {
+            resize();
+        }
+    }
+
+    private void resize() {
         this.width = engine.getScreen().getWidth();
         this.height = engine.getScreen().getHeight();
 
         this.foreground.setBounds(0, 0, width, height);
         this.background.setBounds(0, 0, width, height);
         this.pane.setBounds(0, 0, width, height);
+
+        this.pane.revalidate();
     }
 
     public abstract JPanel getBackground();
