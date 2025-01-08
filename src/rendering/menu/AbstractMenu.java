@@ -1,13 +1,13 @@
 package src.rendering.menu;
 
-import src.imp.Drawable;
+import src.imp.Renderer;
 import src.rendering.RenderEngine;
 import src.rendering.Screen;
 
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class AbstractMenu implements Drawable {
+public abstract class AbstractMenu {
     protected final RenderEngine engine;
     protected final Screen screen;
     protected JLayeredPane pane;
@@ -41,18 +41,17 @@ public abstract class AbstractMenu implements Drawable {
         this.pane.add(foreground, JLayeredPane.PALETTE_LAYER);
 
         screen.addResizeEvent(this::resize);
-        engine.addDrawable(this);
+
+        if(this instanceof Renderer renderer) {
+            engine.addDrawable(renderer);
+        }
     }
 
     public JLayeredPane getPane() {
         return this.pane;
     }
 
-    //Remove this implementation
-    public void draw(Graphics2D g2) {
-
-    }
-
+    //Method for resize event in Screen class
     private void resize() {
         this.width = engine.getScreen().getWidth();
         this.height = engine.getScreen().getHeight();

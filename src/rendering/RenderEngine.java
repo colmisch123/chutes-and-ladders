@@ -1,27 +1,31 @@
 package src.rendering;
 
-import src.imp.Drawable;
+import src.imp.Renderer;
+import src.logic.Board;
+import src.rendering.renderers.BoardRenderer;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class RenderEngine implements Drawable {
-    private Screen screen;
-    private ArrayList<Drawable> drawables = new ArrayList<>();
+public class RenderEngine {
+    private final Screen screen;
+    private final ArrayList<Renderer> renderers = new ArrayList<>();
+    private final BoardRenderer boardRenderer;
 
     public RenderEngine(Screen screen) {
         this.screen = screen;
+        boardRenderer = new BoardRenderer(this);
     }
 
-    @Override
-    public void draw(Graphics2D g) {
-        drawables.forEach((d) -> {
-            d.draw(g);
-        });
+    public void render(Graphics2D g2) {
+        renderers.forEach(r -> r.render(g2));
+
+        Board board = screen.getGameEngine().getBoard();
+        boardRenderer.draw(g2, board);
     }
 
-    public void addDrawable(Drawable drawable) {
-        drawables.add(drawable);
+    public void addDrawable(Renderer renderer) {
+        renderers.add(renderer);
     }
 
     public Screen getScreen() {

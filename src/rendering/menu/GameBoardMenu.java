@@ -1,13 +1,18 @@
 package src.rendering.menu;
 
+import src.imp.Renderer;
 import src.rendering.RenderEngine;
 import src.util.JBackgroundPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
-public class GameBoardMenu extends AbstractMenu {
+public class GameBoardMenu extends AbstractMenu implements Renderer {
     private int x = 0;
+    private int direction = 1;
+    private int speed = 5;
+    private boolean hasHitEdge = false;
 
     public GameBoardMenu(RenderEngine engine) {
         super(engine);
@@ -31,13 +36,27 @@ public class GameBoardMenu extends AbstractMenu {
     }
 
     @Override
-    public void draw(Graphics2D g2) {
-        super.draw(g2);
-
-        if(screen.getCurrentMenu() == this) {
-            g2.setColor(new Color(255, 0, 0));
-            g2.fillRect(x, 100, 100, 100);
-            x++;
+    public void render(Graphics2D g2) {
+        if(screen.getCurrentMenu() != this) {
+            return;
         }
+
+        int boxSize = 100;
+
+        for(int i = 0; i < 7; i++) {
+            int y = (i * boxSize) + i;
+            g2.setColor(new Color(255, 0, i * 25));
+            g2.fillRect(x, y, boxSize, boxSize);
+        }
+
+        if (x + boxSize >= screen.getWidth()) {
+            direction = -1;
+        }
+
+        if (x <= 0) {
+            direction = 1;
+        }
+
+        x += (direction * speed);
     }
 }

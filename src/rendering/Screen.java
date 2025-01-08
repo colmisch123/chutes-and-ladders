@@ -80,6 +80,10 @@ public class Screen extends JFrame implements Runnable {
         return currentMenu;
     }
 
+    public GameEngine getGameEngine() {
+        return gameEngine;
+    }
+
     public AbstractMenu getGameBoardMenu() {
         return gameBoardMenu;
     }
@@ -126,7 +130,7 @@ public class Screen extends JFrame implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        renderEngine.draw(g2);
+        renderEngine.render(g2);
 
         g2.dispose();
     }
