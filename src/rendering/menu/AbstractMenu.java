@@ -24,8 +24,8 @@ public abstract class AbstractMenu {
         priorityInit();
 
         this.pane = new JLayeredPane();
-        this.width = engine.getScreen().getWidth();
-        this.height = engine.getScreen().getHeight();
+        this.width = screen.getWidth();
+        this.height = screen.getHeight();
         this.background = getBackground();
         this.foreground = getForeground();
 

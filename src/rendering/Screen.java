@@ -4,6 +4,7 @@ import src.logic.GameEngine;
 import src.rendering.menu.AbstractMenu;
 import src.rendering.menu.GameBoardMenu;
 import src.rendering.menu.StartingMenu;
+import src.util.RenderPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,15 +21,20 @@ public class Screen extends JFrame implements Runnable {
     private final GameEngine gameEngine;
     private final RenderEngine renderEngine;
 
+    //When the screen is resized, every runnable action in this list gets activated.
     private final LinkedList<Runnable> onResizeEvent = new LinkedList<>();
 
     private AbstractMenu currentMenu;
     private final AbstractMenu startingMenu;
     private final GameBoardMenu gameBoardMenu;
 
+    //Used for detecting when the screen size changes.
     private Dimension sizeCache;
 
     private final GridBagLayout layout = new GridBagLayout();
+
+    //Panels have double buffers, not JFrames, this layer is always placed on the highest level.
+    private final RenderPanel renderPanel;
 
     public Screen() {
         setTitle("Chutes and Ladders");
@@ -36,6 +42,7 @@ public class Screen extends JFrame implements Runnable {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds((int) screenWidth / 4, (int) screenHeight / 10, 960, 720);
         setLayout(null);
+        setContentPane(new JLayeredPane());
 
         sizeCache = getSize();
 
@@ -45,47 +52,43 @@ public class Screen extends JFrame implements Runnable {
         startingMenu = new StartingMenu(renderEngine);
         gameBoardMenu = new GameBoardMenu(renderEngine);
 
+        renderPanel = new RenderPanel(this);
+        addResizeEvent(() -> renderPanel.setBounds(0, 0, getWidth(), getHeight()));
+
         setMenu(startingMenu);
     }
 
+    //For Menu objects only. Will remove the old pane from Container. DOES NOT REPLACE THE CONTENT PANE.
     public void setMenu(AbstractMenu menu) {
         if(currentMenu != null) {
             currentMenu.onRemove();
+            getContentPane().remove(currentMenu.getPane());
         }
+
+        getContentPane().add(menu.getPane(), JLayeredPane.DEFAULT_LAYER);
+
         menu.onSetActive();
         currentMenu = menu;
-        setContentPane(menu.getPane());
-    }
-
-    private boolean hasScreenBeenResized() {
-        Dimension currentSize = getSize();
-
-        if(sizeCache.equals(currentSize)) {
-            return false;
-        }
-
-        this.sizeCache = currentSize;
-        return true;
     }
 
     public void addResizeEvent(Runnable event) {
         onResizeEvent.add(event);
     }
 
-    public GridBagLayout getLayout() {
-        return layout;
+    //This code is run every second. This code is for logic purposes only.
+    private void tick() {
+        if(hasScreenBeenResized()) {
+            onResizeEvent.forEach(Runnable::run);
+        }
+
+        gameEngine.tick();
     }
 
-    public AbstractMenu getCurrentMenu() {
-        return currentMenu;
-    }
+    //This code gets run in the render layer.
+    public void render(Graphics2D g2) {
+        renderEngine.render(g2);
 
-    public GameEngine getGameEngine() {
-        return gameEngine;
-    }
-
-    public AbstractMenu getGameBoardMenu() {
-        return gameBoardMenu;
+        g2.dispose();
     }
 
     @Override
@@ -117,21 +120,30 @@ public class Screen extends JFrame implements Runnable {
         }
     }
 
-    private void tick() {
-        if(hasScreenBeenResized()) {
-            onResizeEvent.forEach(Runnable::run);
+    private boolean hasScreenBeenResized() {
+        Dimension currentSize = getSize();
+
+        if(sizeCache.equals(currentSize)) {
+            return false;
         }
 
-        gameEngine.tick();
+        this.sizeCache = currentSize;
+        return true;
     }
 
-    public void paint(Graphics g) {
-        super.paint(g);
+    public GridBagLayout getLayout() {
+        return layout;
+    }
 
-        Graphics2D g2 = (Graphics2D) g;
+    public AbstractMenu getCurrentMenu() {
+        return currentMenu;
+    }
 
-        renderEngine.render(g2);
+    public GameEngine getGameEngine() {
+        return gameEngine;
+    }
 
-        g2.dispose();
+    public AbstractMenu getGameBoardMenu() {
+        return gameBoardMenu;
     }
 }

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 
+//Useful to quickly create background image panels
 public class JBackgroundPanel extends JPanel {
     private BufferedImage background;
 
