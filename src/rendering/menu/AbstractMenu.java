@@ -5,7 +5,6 @@ import src.rendering.RenderEngine;
 import src.rendering.Screen;
 
 import javax.swing.*;
-import java.awt.*;
 
 public abstract class AbstractMenu {
     protected final RenderEngine engine;
@@ -43,7 +42,7 @@ public abstract class AbstractMenu {
         screen.addResizeEvent(this::resize);
 
         if(this instanceof Renderer renderer) {
-            engine.addDrawable(renderer);
+            engine.addRenderer(renderer);
         }
     }
 

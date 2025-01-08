@@ -53,7 +53,7 @@ public class RenderEngine {
         x += (direction * speed);
     }
 
-    public void addDrawable(Renderer renderer) {
+    public void addRenderer(Renderer renderer) {
         renderers.add(renderer);
     }
 

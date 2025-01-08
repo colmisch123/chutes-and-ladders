@@ -31,4 +31,17 @@ public class Board {
         forEachHelper(action, tile.getNextTile());
     }
 
+    public void addTile(Tile newTile) {
+        addTileHelper(root, newTile);
+    }
+
+    private void addTileHelper(Tile prev, Tile toAdd) {
+        if(prev.getNextTile() == null) {
+            prev.setNext(toAdd);
+            return;
+        }
+
+        addTileHelper(prev.getNextTile(), toAdd);
+    }
+
 }
